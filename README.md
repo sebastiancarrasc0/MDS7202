@@ -6,8 +6,8 @@ Repositorio del curso MDS7202, Facultad de Ciencias Físicas y Matemáticas, Uni
 
 | Nombre | GitHub |
 |--------|--------|
-| Nombre Apellido 1 | [@sebastiancarrasc0](https://github.com/sebastiancarrasc0) |
-| Nombre Apellido 2 |  |
+| Sebastián Carrasco | [@sebastiancarrasc0](https://github.com/sebastiancarrasc0) |
+| Adolfo Rojas | [@AdolfoRV](https://github.com/AdolfoRV) |
 
 ## Estructura del repositorio
 
