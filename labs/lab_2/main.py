@@ -1,9 +1,13 @@
 import argparse
 from pathlib import Path
 
-from agroalerta.datos import cargar_lecturas
-from agroalerta.reporte import contar_riesgos
-from agroalerta.sensores import SensorHumedad, SensorTemperatura, SensorViento
+from src.agroalerta.datos import cargar_lecturas
+from src.agroalerta.reporte import contar_riesgos
+from src.agroalerta.sensores import (
+    SensorHumedad,
+    SensorTemperatura,
+    SensorViento,
+)
 
 
 def main():
