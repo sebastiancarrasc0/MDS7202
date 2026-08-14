@@ -1,4 +1,4 @@
-from agroalerta.sensores import Sensor
+from src.agroalerta.sensores import Sensor
 
 
 def contar_riesgos(
