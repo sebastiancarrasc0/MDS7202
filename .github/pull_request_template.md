@@ -16,8 +16,8 @@
 
 ## Integrantes
 
-- Nombre Apellido 1
-- Nombre Apellido 2
+- Adolfo Rojas
+- Sebastián Carrasco
 
 ## Validaciones realizadas
 
@@ -29,5 +29,4 @@
 
 ## Evidencia o enlaces relevantes
 
-- Notebook:
-- Pull Request:
+- Pull Request: [MDS7202/pull](https://github.com/sebastiancarrasc0/MDS7202/pull/)
