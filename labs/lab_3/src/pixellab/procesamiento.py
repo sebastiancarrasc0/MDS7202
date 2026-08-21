@@ -34,26 +34,46 @@ class LibImagen:
         return Imagen(zeros.astype(int))
 
     def flip(self, img_in: Imagen, axis: str) -> Imagen:
-        # Su código aquí
-        raise NotImplementedError(
-            "Completen flip antes de ejecutar el programa."
-        )
+        if axis == "h":
+            resultado = img_in.imagen[:, ::-1, :]
+        elif axis == "v":
+            resultado = img_in.imagen[::-1, :, :]
+        else:
+            raise ValueError(
+                f"Eje '{axis}' no válido. Valores posibles: 'h' (horizontal) o 'v' (vertical)."
+            )
+        return Imagen(resultado.astype(int))
 
     def set_saturation(self, img_in: Imagen, C: float) -> Imagen:
-        # Su código aquí
-        raise NotImplementedError(
-            "Completen set_saturation antes de ejecutar el programa."
-        )
+        img = img_in.imagen
+        gris = self.to_gray(img_in).imagen
+        resultado = gris + C * (img - gris)
+        resultado = resultado.astype(int)
+        resultado[resultado > 255] = 255
+        resultado[resultado < 0] = 0
+        return Imagen(resultado)
 
     def set_contrast(self, img_in: Imagen, C: float) -> Imagen:
-        # Su código aquí
-        raise NotImplementedError(
-            "Completen set_contrast antes de ejecutar el programa."
-        )
+        img = img_in.imagen
+        F = 259 * (C + 255) / (255 * (259 - C))
+        resultado = F * (img - 128) + 128
+        resultado = resultado.astype(int)
+        resultado[resultado > 255] = 255
+        resultado[resultado < 0] = 0
+        return Imagen(resultado)
 
     def conv_channel(self, img_in: Imagen, kernel: np.ndarray) -> Imagen:
-        """Por documentar (esto es parte del trabajo de la Etapa 6)."""
-        # El cuerpo de este método lo entrega el curso.
+        """
+        La convolución es una operación matemática. Consiste en aplicar un kernel
+        (una matriz de números) a toda la imagen para obtener una nueva que puede tener
+        diferentes efectos, como desenfoque, detección de bordes, etc.
+
+        La convolución recorre cada píxel de la imagen y aplica el kernel a los vecinos y
+        suma los resultados para obtener el nuevo valor del píxel. Aplicar esto
+        a toda la imagen es lo que genera la nueva imagen transformada.
+
+        """
+
         img = img_in.imagen
         img_out = []
         for i in range(img.shape[-1]):
