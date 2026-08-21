@@ -17,8 +17,12 @@ class Imagen:
             raise TypeError(
                 "Debes entregar un arreglo de numpy como argumento del constructor de Imagen."
             )
-        if img.ndim != 3 or img.shape[-1] != 3:
-            raise ValueError("no calzan")
+        if img.ndim != 3:
+            raise ValueError("La imagen debe contener 3 dimensiones")
+
+        if img.shape[-1] != 3:
+            raise ValueError("La imagen debe contener 3 canales")
+
         self.imagen = img
 
     def __add__(self, other: int | float | np.ndarray | Imagen) -> Imagen:
