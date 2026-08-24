@@ -45,7 +45,7 @@ class LibImagen:
         return Imagen(resultado.astype(int))
 
     def set_saturation(self, img_in: Imagen, C: float) -> Imagen:
-        img = img_in.imagen
+        img = np.copy(img_in.imagen)
         gris = self.to_gray(img_in).imagen
         resultado = gris + C * (img - gris)
         resultado = resultado.astype(int)
@@ -54,7 +54,7 @@ class LibImagen:
         return Imagen(resultado)
 
     def set_contrast(self, img_in: Imagen, C: float) -> Imagen:
-        img = img_in.imagen
+        img = np.copy(img_in.imagen)
         F = 259 * (C + 255) / (255 * (259 - C))
         resultado = F * (img - 128) + 128
         resultado = resultado.astype(int)
@@ -74,7 +74,7 @@ class LibImagen:
 
         """
 
-        img = img_in.imagen
+        img = np.copy(img_in.imagen)
         img_out = []
         for i in range(img.shape[-1]):
             img_channel = convolve2d(
