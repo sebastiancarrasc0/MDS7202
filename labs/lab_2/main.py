@@ -15,7 +15,7 @@ def main():
     parser.add_argument("--fecha", default="2026-06-15")
     args = parser.parse_args()
 
-    ruta = Path(__file__).parent.parent / "data" / "lecturas.csv"
+    ruta = Path(__file__).parent / "data" / "lecturas.csv"
     lecturas = cargar_lecturas(ruta, args.fecha)
 
     sensores = [
