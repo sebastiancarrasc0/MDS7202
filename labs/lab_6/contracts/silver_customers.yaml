@@ -1,11 +1,18 @@
 table: silver.customers
-purpose: ""
-grain: ""
-primary_key: []
-owner: ""
-lineage: []
-classification: ""
-required_columns: []
-column_types: {}
+purpose: Registrar perfiles de clientes por orden.
+grain: Una fila por customer_id.
+primary_key: [customer_id]
+owner: Fidelización
+lineage: [bronze.customers]
+classification: confidencial
+required_columns: [customer_id, customer_unique_id]
+column_types:
+    customer_id: string
+    customer_unique_id: string
 allow_empty: false
-constraints: {}
+constraints:
+    customer_id:
+        nullable: false
+        unique: true
+    customer_unique_id:
+        nullable: false
