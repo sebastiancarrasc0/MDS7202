@@ -37,8 +37,7 @@ def build_orders(orders: pl.DataFrame) -> pl.DataFrame:
             ]
         )
     except Exception as e:
-        # El test espera específicamente el string "no interpretable"
-        raise ContractViolation(f"Fecha no interpretable: {e}")
+        raise ContractViolation("no interpretable") from e
 
     if (
         orders_silver.filter(
