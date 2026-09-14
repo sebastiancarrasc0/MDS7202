@@ -1,0 +1,28 @@
+table: silver.orders
+purpose: Registrar historial de órdenes con fechas tipadas y estados consolidados.
+grain: Una fila por order_id.
+primary_key: [order_id]
+owner: Operaciones
+lineage: [bronze.orders]
+classification: interno
+required_columns:
+    [
+        order_id,
+        customer_id,
+        order_status,
+        order_purchase_timestamp,
+        delivery_timestamp_missing,
+    ]
+column_types:
+    order_id: string
+    customer_id: string
+    order_status: string
+    order_purchase_timestamp: datetime
+    delivery_timestamp_missing: integer
+allow_empty: false
+constraints:
+    order_id:
+        nullable: false
+        unique: true
+    customer_id:
+        nullable: false

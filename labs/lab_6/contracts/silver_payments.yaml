@@ -1,0 +1,18 @@
+table: silver.payments
+purpose: Registrar transacciones financieras por orden.
+grain: Una fila por order_id y payment_sequential.
+primary_key: [order_id, payment_sequential]
+owner: Finanzas
+lineage: [bronze.payments]
+classification: interno
+required_columns: [order_id, payment_sequential, payment_value]
+column_types:
+    order_id: string
+    payment_sequential: integer
+    payment_value: float
+allow_empty: false
+constraints:
+    payment_value:
+        nullable: false
+        minimum: 0.0
+        finite: true
