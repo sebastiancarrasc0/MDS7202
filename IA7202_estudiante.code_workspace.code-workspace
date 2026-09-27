@@ -1,0 +1,273 @@
+// Workspace del curso IA7202.
+//
+// Abre el repositorio y cada laboratorio como carpetas separadas. Eso importa:
+// un lab que trae su propio `pyproject.toml` es un proyecto aparte, y VS Code
+// solo usa su entorno (`.venv`) si el lab está listado acá como carpeta raíz.
+// Sin esto, los `import` de ese lab aparecen subrayados aunque las
+// dependencias estén instaladas.
+//
+// Sirve cualquiera de las cuatro formas de nombrar la carpeta —`Lab_1`,
+// `Lab1`, `lab1`, `lab_1`—, así que no hay que renombrar nada. En el
+// Explorador solo se ven las que existen de verdad; las demás aparecen vacías
+// y se pueden ignorar.
+{
+  "folders": [
+    {
+      "name": "Mi repositorio",
+      "path": "."
+    },
+    {
+      "name": "Lab 1 (Lab_1)",
+      "path": "labs/Lab_1"
+    },
+    {
+      "name": "Lab 1 (lab1)",
+      "path": "labs/lab1"
+    },
+    {
+      "name": "Lab 1 (lab_1)",
+      "path": "labs/lab_1"
+    },
+    {
+      "name": "Lab 2 (Lab_2)",
+      "path": "labs/Lab_2"
+    },
+    {
+      "name": "Lab 2 (lab2)",
+      "path": "labs/lab2"
+    },
+    {
+      "name": "Lab 2 (lab_2)",
+      "path": "labs/lab_2"
+    },
+    {
+      "name": "Lab 3 (Lab_3)",
+      "path": "labs/Lab_3"
+    },
+    {
+      "name": "Lab 3 (Lab3)",
+      "path": "labs/Lab3"
+    },
+    {
+      "name": "Lab 3 (lab3)",
+      "path": "labs/lab3"
+    },
+    {
+      "name": "Lab 3 (lab_3)",
+      "path": "labs/lab_3"
+    },
+    {
+      "name": "Lab 4 (Lab_4)",
+      "path": "labs/Lab_4"
+    },
+    {
+      "name": "Lab 4 (Lab4)",
+      "path": "labs/Lab4"
+    },
+    {
+      "name": "Lab 4 (lab4)",
+      "path": "labs/lab4"
+    },
+    {
+      "name": "Lab 4 (lab_4)",
+      "path": "labs/lab_4"
+    },
+    {
+      "name": "Lab 5 (Lab_5)",
+      "path": "labs/Lab_5"
+    },
+    {
+      "name": "Lab 5 (Lab5)",
+      "path": "labs/Lab5"
+    },
+    {
+      "name": "Lab 5 (lab5)",
+      "path": "labs/lab5"
+    },
+    {
+      "name": "Lab 5 (lab_5)",
+      "path": "labs/lab_5"
+    },
+    {
+      "name": "Lab 6 (Lab_6)",
+      "path": "labs/Lab_6"
+    },
+    {
+      "name": "Lab 6 (Lab6)",
+      "path": "labs/Lab6"
+    },
+    {
+      "name": "Lab 6 (lab6)",
+      "path": "labs/lab6"
+    },
+    {
+      "name": "Lab 6 (lab_6)",
+      "path": "labs/lab_6"
+    },
+    {
+      "name": "Lab 7 (Lab_7)",
+      "path": "labs/Lab_7"
+    },
+    {
+      "name": "Lab 7 (Lab7)",
+      "path": "labs/Lab7"
+    },
+    {
+      "name": "Lab 7 (lab7)",
+      "path": "labs/lab7"
+    },
+    {
+      "name": "Lab 7 (lab_7)",
+      "path": "labs/lab_7"
+    },
+    {
+      "name": "Lab 8 (Lab_8)",
+      "path": "labs/Lab_8"
+    },
+    {
+      "name": "Lab 8 (Lab8)",
+      "path": "labs/Lab8"
+    },
+    {
+      "name": "Lab 8 (lab8)",
+      "path": "labs/lab8"
+    },
+    {
+      "name": "Lab 8 (lab_8)",
+      "path": "labs/lab_8"
+    },
+    {
+      "name": "Lab 9 (Lab_9)",
+      "path": "labs/Lab_9"
+    },
+    {
+      "name": "Lab 9 (Lab9)",
+      "path": "labs/Lab9"
+    },
+    {
+      "name": "Lab 9 (lab9)",
+      "path": "labs/lab9"
+    },
+    {
+      "name": "Lab 9 (lab_9)",
+      "path": "labs/lab_9"
+    },
+    {
+      "name": "Lab 10 (Lab_10)",
+      "path": "labs/Lab_10"
+    },
+    {
+      "name": "Lab 10 (Lab10)",
+      "path": "labs/Lab10"
+    },
+    {
+      "name": "Lab 10 (lab10)",
+      "path": "labs/lab10"
+    },
+    {
+      "name": "Lab 10 (lab_10)",
+      "path": "labs/lab_10"
+    },
+    {
+      "name": "Lab 11 (Lab_11)",
+      "path": "labs/Lab_11"
+    },
+    {
+      "name": "Lab 11 (Lab11)",
+      "path": "labs/Lab11"
+    },
+    {
+      "name": "Lab 11 (lab11)",
+      "path": "labs/lab11"
+    },
+    {
+      "name": "Lab 11 (lab_11)",
+      "path": "labs/lab_11"
+    },
+    {
+      "name": "Lab 12 (Lab_12)",
+      "path": "labs/Lab_12"
+    },
+    {
+      "name": "Lab 12 (Lab12)",
+      "path": "labs/Lab12"
+    },
+    {
+      "name": "Lab 12 (lab12)",
+      "path": "labs/lab12"
+    },
+    {
+      "name": "Lab 12 (lab_12)",
+      "path": "labs/lab_12"
+    },
+    {
+      "name": "Lab 13 (Lab_13)",
+      "path": "labs/Lab_13"
+    },
+    {
+      "name": "Lab 13 (Lab13)",
+      "path": "labs/Lab13"
+    },
+    {
+      "name": "Lab 13 (lab13)",
+      "path": "labs/lab13"
+    },
+    {
+      "name": "Lab 13 (lab_13)",
+      "path": "labs/lab_13"
+    },
+    {
+      "name": "Lab 14 (Lab_14)",
+      "path": "labs/Lab_14"
+    },
+    {
+      "name": "Lab 14 (Lab14)",
+      "path": "labs/Lab14"
+    },
+    {
+      "name": "Lab 14 (lab14)",
+      "path": "labs/lab14"
+    },
+    {
+      "name": "Lab 14 (lab_14)",
+      "path": "labs/lab_14"
+    },
+    {
+      "name": "Lab 15 (Lab_15)",
+      "path": "labs/Lab_15"
+    },
+    {
+      "name": "Lab 15 (Lab15)",
+      "path": "labs/Lab15"
+    },
+    {
+      "name": "Lab 15 (lab15)",
+      "path": "labs/lab15"
+    },
+    {
+      "name": "Lab 15 (lab_15)",
+      "path": "labs/lab_15"
+    }
+  ],
+  "settings": {
+    // Referencia a carpeta con nombre: un lab sin `.venv` propio usa el
+    // entorno de la raíz, el que crea `uv sync --locked --all-groups`. Un lab
+    // que sí trae el suyo manda sobre esto con su `.vscode/settings.json`.
+    "python.defaultInterpreterPath": "${workspaceFolder:Mi repositorio}/.venv/bin/python",
+    "python.analysis.extraPaths": [
+      "${workspaceFolder}"
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.testing.pytestEnabled": true,
+    "python.terminal.activateEnvironment": true,
+    // Los notebooks corren con cwd en su propio lab, para que las rutas
+    // relativas (`data/archivo.csv`) y los imports del lab funcionen.
+    "jupyter.notebookFileRoot": "${workspaceFolder}",
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/.ruff_cache": true,
+      "**/.pytest_cache": true,
+      "**/.ipynb_checkpoints": true
+    }
+  }
+}

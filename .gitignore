@@ -203,6 +203,13 @@ cython_debug/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
 
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+__MACOSX/
+._*
+
 # Ruff stuff:
 .ruff_cache/
 
@@ -216,3 +223,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Data
+labs/lab_4/data/cru_country_tmp_tidy.csv
+**/data/*.csv
+
+# Archivos de Mac
+__MACOSX/
+._*
