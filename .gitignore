@@ -207,6 +207,8 @@ tempCodeRunnerFile.py
 .DS_Store
 .AppleDouble
 .LSOverride
+__MACOSX/
+._*
 
 # Ruff stuff:
 .ruff_cache/
@@ -225,3 +227,7 @@ __marimo__/
 # Data
 labs/lab_4/data/cru_country_tmp_tidy.csv
 **/data/*.csv
+
+# Archivos de Mac
+__MACOSX/
+._*
