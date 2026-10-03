@@ -3,6 +3,8 @@
 import polars as pl
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from src.heroverse.columns import CATEGORICAS, PUNTAJES
+
 
 def altura_en_cm(columna: str = "height") -> pl.Expr:
     """Expresión con la altura en centímetros, llamada `altura_cm`.
@@ -12,9 +14,15 @@ def altura_en_cm(columna: str = "height") -> pl.Expr:
     "0'0 • 0 cm": nadie mide 0 cm, así que ese cero es la forma en que el
     scrape marca un dato ausente.
     """
-    raise NotImplementedError(
-        "Completen altura_en_cm antes de ejecutar el programa."
+    metrica = pl.col(columna).str.extract(r"•\s*(.+)$", 1)
+    numero = (
+        metrica.str.extract(r"([\d.,]+)\s*(?:cm|meters)", 1)
+        .str.replace_all(",", "")
+        .cast(pl.Float64)
     )
+    unidad = metrica.str.extract(r"[\d.,]+\s*(cm|meters)", 1)
+    altura = pl.when(unidad == "meters").then(numero * 100).otherwise(numero)
+    return pl.when(altura > 0).then(altura).otherwise(None).alias("altura_cm")
 
 
 def peso_en_kg(columna: str = "weight") -> pl.Expr:
@@ -24,8 +32,18 @@ def peso_en_kg(columna: str = "weight") -> pl.Expr:
     "6,600 lb • 3.0 tons" (3 000,0; una tonelada son 1 000 kg). La coma de
     "6,600" separa miles. Es nula si el valor es "-".
     """
-    raise NotImplementedError(
-        "Completen peso_en_kg antes de ejecutar el programa."
+    metrica = pl.col(columna).str.extract(r"•\s*(.+)$", 1)
+    numero = (
+        metrica.str.extract(r"([\d.,]+)\s*(?:kg|tons)", 1)
+        .str.replace_all(",", "")
+        .cast(pl.Float64)
+    )
+    unidad = metrica.str.extract(r"[\d.,]+\s*(kg|tons)", 1)
+    return (
+        pl.when(unidad == "tons")
+        .then(numero * 1000)
+        .otherwise(numero)
+        .alias("peso_kg")
     )
 
 
@@ -50,8 +68,12 @@ def lista_poderes(columna: str = "superpowers") -> pl.Expr:
     "[]" produce una lista vacía. Se eliminan etiquetas repetidas
     conservando el orden de primera aparición.
     """
-    raise NotImplementedError(
-        "Completen lista_poderes antes de ejecutar el programa."
+    return (
+        pl.col(columna)
+        .str.extract_all(r"'[^']+'")
+        .list.eval(pl.element().str.strip_chars("'"))
+        .list.unique(maintain_order=True)
+        .alias("poderes")
     )
 
 
@@ -61,9 +83,15 @@ def puntajes_con_ficha() -> list[pl.Expr]:
     Seis ceros no describen a un personaje sin habilidades: en el catálogo
     coinciden siempre con `overall_score == "-"`, es decir, sin ficha.
     """
-    raise NotImplementedError(
-        "Completen puntajes_con_ficha antes de ejecutar el programa."
-    )
+    seis_ceros = pl.all_horizontal([pl.col(p) == 0 for p in PUNTAJES])
+    return [
+        pl.when(seis_ceros)
+        .then(None)
+        .otherwise(pl.col(p))
+        .cast(pl.Int64)
+        .alias(p)
+        for p in PUNTAJES
+    ]
 
 
 def construir_features(personajes: pl.DataFrame) -> pl.DataFrame:
@@ -80,9 +108,29 @@ def construir_features(personajes: pl.DataFrame) -> pl.DataFrame:
     `ValueError` con un mensaje que menciona `name`, porque cada fila debe
     representar a un solo personaje.
     """
-    raise NotImplementedError(
-        "Completen construir_features antes de ejecutar el programa."
+    if personajes["name"].null_count() > 0:
+        raise ValueError("`name` contiene valores nulos.")
+    if personajes["name"].is_duplicated().any():
+        raise ValueError("`name` contiene valores repetidos.")
+
+    return personajes.select(
+        "name",
+        *CATEGORICAS,
+        *puntajes_con_ficha(),
+        altura_en_cm(),
+        peso_en_kg(),
+        anio_aparicion(),
+        lista_poderes(),
+    ).with_columns(
+        pl.col("poderes").list.len().alias("n_poderes"),
+        personajes["powers_text"].alias("powers_text"),
     )
+
+
+def _bloque_binario(binarizador: MultiLabelBinarizer, matriz) -> pl.DataFrame:
+    """Matriz multi-hot como columnas `poder_<etiqueta>` de tipo Int8."""
+    nombres = [f"poder_{etiqueta}" for etiqueta in binarizador.classes_]
+    return pl.DataFrame(matriz, schema=nombres, orient="row").cast(pl.Int8)
 
 
 def ajustar_poderes(
@@ -96,9 +144,9 @@ def ajustar_poderes(
     en el orden de `classes_`, sin modificar espacios ni mayúsculas.
     Una lista vacía produce una fila de ceros en el bloque de poderes.
     """
-    raise NotImplementedError(
-        "Completen ajustar_poderes antes de ejecutar el programa."
-    )
+    binarizador = MultiLabelBinarizer()
+    matriz = binarizador.fit_transform(features["poderes"].to_list())
+    return binarizador, features.hstack(_bloque_binario(binarizador, matriz))
 
 
 def transformar_poderes(
@@ -112,6 +160,5 @@ def transformar_poderes(
     `MultiLabelBinarizer` emite un `UserWarning` que lo nombra. No se
     reajusta, porque eso cambiaría las columnas del catálogo.
     """
-    raise NotImplementedError(
-        "Completen transformar_poderes antes de ejecutar el programa."
-    )
+    matriz = binarizador.transform(features["poderes"].to_list())
+    return features.hstack(_bloque_binario(binarizador, matriz))
