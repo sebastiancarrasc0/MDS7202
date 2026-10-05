@@ -1,7 +1,14 @@
 """Clustering sin etiquetas: elección de k, estabilidad, perfiles y equivalentes."""
 
+from __future__ import annotations
+
+from itertools import combinations
+
 import numpy as np
 import polars as pl
+from sklearn.cluster import KMeans
+from sklearn.metrics import adjusted_rand_score, silhouette_score
+from sklearn.neighbors import NearestNeighbors
 
 
 def elegir_k(X: np.ndarray, ks: list[int], semilla: int = 0) -> pl.DataFrame:
@@ -12,9 +19,17 @@ def elegir_k(X: np.ndarray, ks: list[int], semilla: int = 0) -> pl.DataFrame:
     `silhouette`. Cada `k` debe estar entre 2 y el número de filas menos uno,
     porque el silhouette no está definido fuera de ese rango.
     """
-    raise NotImplementedError(
-        "Completen elegir_k antes de ejecutar el programa."
-    )
+    filas = []
+    for k in ks:
+        km = KMeans(n_clusters=k, n_init=10, random_state=semilla).fit(X)
+        filas.append(
+            {
+                "k": k,
+                "inercia": float(km.inertia_),
+                "silhouette": float(silhouette_score(X, km.labels_)),
+            }
+        )
+    return pl.DataFrame(filas)
 
 
 def estabilidad(X: np.ndarray, k: int, semillas: list[int]) -> float:
@@ -26,8 +41,18 @@ def estabilidad(X: np.ndarray, k: int, semillas: list[int]) -> float:
     coinciden como lo harían al azar. `n_init=1` hace que cada semilla
     muestre su propio resultado.
     """
-    raise NotImplementedError(
-        "Completen estabilidad antes de ejecutar el programa."
+    if len(semillas) < 2:
+        raise ValueError(
+            "Se necesitan al menos dos semillas para medir estabilidad."
+        )
+    particiones = [
+        KMeans(n_clusters=k, n_init=1, random_state=s).fit_predict(X)
+        for s in semillas
+    ]
+    return float(
+        np.mean(
+            [adjusted_rand_score(a, b) for a, b in combinations(particiones, 2)]
+        )
     )
 
 
@@ -39,8 +64,13 @@ def perfil_clusters(
     `etiquetas` trae el grupo de cada fila de `features`. Columnas: `cluster`,
     `n` y una por cada elemento de `columnas`, ordenadas por `cluster`.
     """
-    raise NotImplementedError(
-        "Completen perfil_clusters antes de ejecutar el programa."
+    if len(etiquetas) != features.height:
+        raise ValueError("Debe haber una etiqueta por fila de features.")
+    return (
+        features.with_columns(pl.Series("cluster", np.asarray(etiquetas)))
+        .group_by("cluster")
+        .agg(pl.len().alias("n"), pl.col(list(columnas)).mean())
+        .sort("cluster")
     )
 
 
@@ -59,6 +89,33 @@ def equivalentes(
     sea de esa editorial. El resultado tiene `name`, `creator` y `distancia`,
     en distancia creciente.
     """
-    raise NotImplementedError(
-        "Completen equivalentes antes de ejecutar el programa."
+    nombres = personajes["name"].to_list()
+    if consulta not in nombres:
+        raise KeyError(consulta)
+    if k < 1:
+        raise ValueError("k debe ser al menos 1.")
+    i = nombres.index(consulta)
+
+    vecindad = NearestNeighbors(
+        n_neighbors=len(nombres), metric=metrica, algorithm="brute"
+    ).fit(X)
+    distancias, indices = vecindad.kneighbors(X[[i]])
+
+    ranking = pl.DataFrame(
+        {
+            "idx": indices[0],
+            "distancia": distancias[0],
+        }
+    ).filter(pl.col("idx") != i)
+
+    return (
+        ranking.with_columns(
+            pl.Series("name", nombres)[ranking["idx"]].alias("name"),
+            personajes["creator"][ranking["idx"]].alias("creator"),
+        )
+        .filter(
+            pl.col("creator").is_null() | (pl.col("creator") != excluir_creator)
+        )
+        .select("name", "creator", "distancia")
+        .head(k)
     )
