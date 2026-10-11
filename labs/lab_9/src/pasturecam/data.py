@@ -2,6 +2,8 @@
 
 import polars as pl
 
+from src.pasturecam.contratos import OBJETIVOS
+
 
 def a_formato_ancho(df_largo: pl.DataFrame) -> pl.DataFrame:
     """Pivotea la tabla de mediciones de formato largo a ancho.
@@ -18,6 +20,7 @@ def a_formato_ancho(df_largo: pl.DataFrame) -> pl.DataFrame:
         for c in df_largo.columns
         if c not in ("sample_id", "target_name", "target")
     ]
-    return df_largo.pivot(
-        index=columnas_indice, on="target_name", values="target"
+    ancho = df_largo.pivot(
+        on="target_name", index=columnas_indice, values="target"
     )
+    return ancho.select(columnas_indice + list(OBJETIVOS))
