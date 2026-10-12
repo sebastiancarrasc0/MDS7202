@@ -1,8 +1,9 @@
 """Métricas de regresión para la biomasa de pradera."""
 
 import numpy as np
+from sklearn.metrics import r2_score
 
-from src.pasturecam.contratos import PESOS_OBJETIVOS
+from src.pasturecam.contratos import AREA_CUADRANTE_M2, PESOS_OBJETIVOS
 
 
 def r2_log_ponderado(
@@ -20,9 +21,14 @@ def r2_log_ponderado(
     resultado es la suma ponderada de los R² por objetivo; vale 1,0 si las
     predicciones son idénticas a los valores reales.
     """
-    raise NotImplementedError(
-        "Completen r2_log_ponderado antes de ejecutar el programa."
-    )
+    total = 0.0
+    for nombre, peso in pesos.items():
+        real = np.log1p(np.asarray(y_real[nombre], dtype=float))
+        pred = np.log1p(
+            np.clip(np.asarray(y_pred[nombre], dtype=float), 0, None)
+        )
+        total += peso * r2_score(real, pred)
+    return float(total)
 
 
 def gramos_a_kg_ha(gramos: float) -> float:
@@ -32,6 +38,4 @@ def gramos_a_kg_ha(gramos: float) -> float:
     `gramos_a_kg_ha(1)` da aproximadamente 47,6: un gramo en el cuadrante
     equivale a esa cantidad de kilogramos repartidos en una hectárea.
     """
-    raise NotImplementedError(
-        "Completen gramos_a_kg_ha antes de ejecutar el programa."
-    )
+    return gramos / 1000 * (10000 / AREA_CUADRANTE_M2)
