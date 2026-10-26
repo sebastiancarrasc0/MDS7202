@@ -2,6 +2,10 @@
 
 from collections.abc import Sequence
 
+import numpy as np
+
+from src.radio_fcfm.contratos import FRANJAS
+
 
 def a_franja(estado: str) -> str:
     """Devuelve la franja de programación en que suena un estado de ánimo.
@@ -11,9 +15,10 @@ def a_franja(estado: str) -> str:
     Si `estado` no es uno de los cuatro estados de MoodyLyrics4Q, levanta un
     `ValueError` que nombra el estado desconocido.
     """
-    raise NotImplementedError(
-        "Completen a_franja antes de ejecutar el programa."
-    )
+    try:
+        return FRANJAS[estado]
+    except (KeyError, TypeError):
+        raise ValueError(f"Ánimo desconocido: {estado!r}") from None
 
 
 def acierto_por_franja(y_real: Sequence[str], y_pred: Sequence[str]) -> float:
@@ -25,6 +30,13 @@ def acierto_por_franja(y_real: Sequence[str], y_pred: Sequence[str]) -> float:
     `ValueError`. El resultado va entre 0 y 1 y, como fusionar estados solo
     elimina errores, nunca es menor que el accuracy de los cuatro estados.
     """
-    raise NotImplementedError(
-        "Completen acierto_por_franja antes de ejecutar el programa."
-    )
+    if len(y_real) != len(y_pred):
+        raise ValueError(
+            f"y_real e y_pred tienen largo distinto: {len(y_real)} y {len(y_pred)}"
+        )
+    if len(y_real) == 0:
+        raise ValueError("No hay canciones para evaluar")
+    aciertos = [
+        a_franja(r) == a_franja(p) for r, p in zip(y_real, y_pred, strict=True)
+    ]
+    return float(np.mean(aciertos))

@@ -2,8 +2,12 @@
 
 from collections.abc import Sequence
 
+import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
+
+from src.radio_fcfm.data import limpiar_letra
+from src.radio_fcfm.evaluation import a_franja
 
 
 def predecir_animo(modelo: Pipeline, letras: Sequence[str]) -> pd.DataFrame:
@@ -17,6 +21,17 @@ def predecir_animo(modelo: Pipeline, letras: Sequence[str]) -> pd.DataFrame:
     probabilidad de la clase elegida, entre 0 y 1). La confianza no está
     calibrada: no es la probabilidad real de acertar.
     """
-    raise NotImplementedError(
-        "Completen predecir_animo antes de ejecutar el programa."
+    if not letras:
+        return pd.DataFrame(columns=["animo", "franja", "confianza"])
+    limpias = [limpiar_letra(letra) for letra in letras]
+    probabilidades = modelo.predict_proba(limpias)
+    mejores = probabilidades.argmax(axis=1)
+    clases = np.asarray(modelo.classes_)
+    animos = [str(clases[i]) for i in mejores]
+    return pd.DataFrame(
+        {
+            "animo": animos,
+            "franja": [a_franja(animo) for animo in animos],
+            "confianza": probabilidades[np.arange(len(mejores)), mejores],
+        }
     )
