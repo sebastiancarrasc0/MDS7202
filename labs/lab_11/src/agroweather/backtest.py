@@ -419,6 +419,21 @@ def mejor_umbral(
     pronóstico es menor que el umbral. El umbral se elige en validation y se
     aplica una sola vez en test.
     """
-    raise NotImplementedError(
-        "Completen mejor_umbral antes de ejecutar esta celda."
-    )
+    if real.len() != pronostico.len():
+        raise ValueError("real y pronostico deben tener el mismo largo")
+    if real.len() == 0:
+        raise ValueError("No hay noches para elegir el umbral")
+    if pronostico.null_count() > 0:
+        raise ValueError("pronostico no puede tener valores faltantes")
+
+    mejor = None
+    for candidato in pronostico.unique().sort():
+        costo = costo_alerta(
+            real,
+            pronostico < candidato,
+            costo_por_alerta,
+            costo_helada,
+        )
+        if mejor is None or costo < mejor[1]:
+            mejor = (float(candidato), costo)
+    return mejor
