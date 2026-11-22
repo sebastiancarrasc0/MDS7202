@@ -1,8 +1,10 @@
 """Configuración del servicio: variables de entorno y archivo `.env`."""
 
 from functools import lru_cache
+from pathlib import Path
 
-from pydantic_settings import BaseSettings
+from pydantic import SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -21,7 +23,17 @@ class Settings(BaseSettings):
     | `APR_LOG_LEVEL` | `log_level` | `INFO` |
     """
 
-    # Su código aquí: declaren `model_config` y los cuatro campos de la tabla.
+    model_config = SettingsConfigDict(
+        env_prefix="APR_",
+        env_file=".env",
+        env_ignore_empty=True,
+        extra="ignore",
+    )
+
+    api_key: SecretStr
+    grupo: str
+    model_dir: Path = Path("models")
+    log_level: str = "INFO"
 
 
 @lru_cache

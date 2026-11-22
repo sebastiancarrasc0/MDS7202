@@ -1,8 +1,12 @@
 """Rutas de inferencia: información del modelo, vida y predicción."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
-from src.aguaapr.contracts import Servicios
+from .artifacts import a_tabla, predecir
+from .constants import FEATURES, OPCIONALES, RANGOS
+from .contracts import RespuestaPrediccion, Servicios
+from .deps import crear_dependencia_clave
+from .validation import MedicionAgua
 
 
 def crear_router_inferencia(servicios: Servicios) -> APIRouter:
@@ -17,6 +21,37 @@ def crear_router_inferencia(servicios: Servicios) -> APIRouter:
       `RespuestaPrediccion` con la predicción y su probabilidad. Exige la
       clave de API con `crear_dependencia_clave`.
     """
-    raise NotImplementedError(
-        "Completen crear_router_inferencia antes de ejecutar el programa."
-    )
+    router = APIRouter()
+    exigir_clave = crear_dependencia_clave(servicios)
+
+    @router.get("/")
+    def describir_modelo():
+        return {
+            "metricas_validacion": servicios.metadata["metricas_validacion"],
+            "entrada": {
+                columna: {
+                    "minimo": RANGOS[columna][0],
+                    "maximo": RANGOS[columna][1],
+                    "opcional": columna in OPCIONALES,
+                }
+                for columna in FEATURES
+            },
+            "salida": {
+                "prediccion": "1 si el agua es potable, 0 si no es potable",
+                "probabilidad": "probabilidad estimada de que el agua sea potable",
+            },
+        }
+
+    @router.get("/health")
+    def health():
+        return {"estado": "ok"}
+
+    @router.post("/predict", response_model=RespuestaPrediccion)
+    def predict(medicion: MedicionAgua, _: None = Depends(exigir_clave)):
+        tabla = a_tabla([medicion])
+        clases, probabilidades = predecir(servicios.modelo, tabla)
+        return RespuestaPrediccion(
+            prediccion=int(clases[0]), probabilidad=float(probabilidades[0])
+        )
+
+    return router
