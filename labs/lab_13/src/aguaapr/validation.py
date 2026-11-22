@@ -1,6 +1,6 @@
 """Contrato de entrada: las nueve mediciones de una muestra de agua."""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class MedicionAgua(BaseModel):
@@ -12,4 +12,12 @@ class MedicionAgua(BaseModel):
     rango, o `nan`, se rechaza con un `ValidationError` que nombra el campo.
     """
 
-    # Su código aquí: declaren las nueve mediciones con su tipo y su rango.
+    ph: float | None = Field(default=None, ge=0, le=14)
+    Hardness: float = Field(ge=0, le=500)
+    Solids: float = Field(ge=0, le=100_000)
+    Chloramines: float = Field(ge=0, le=15)
+    Sulfate: float | None = Field(default=None, ge=0, le=600)
+    Conductivity: float = Field(ge=0, le=1_000)
+    Organic_carbon: float = Field(ge=0, le=50)
+    Trihalomethanes: float | None = Field(default=None, ge=0, le=200)
+    Turbidity: float = Field(ge=0, le=10)

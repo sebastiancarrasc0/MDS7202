@@ -3,7 +3,12 @@
 from pathlib import Path
 from typing import Any
 
+import joblib
+import sklearn
 from sklearn.pipeline import Pipeline
+
+from .artifacts import ErrorArtefacto, leer_metadata
+from .constants import FEATURES
 
 
 def cargar_modelo(directorio: Path) -> tuple[Pipeline, dict[str, Any]]:
@@ -14,6 +19,20 @@ def cargar_modelo(directorio: Path) -> tuple[Pipeline, dict[str, Any]]:
     la versión de scikit-learn instalada. Si algo no calza lanza
     `ErrorArtefacto` con un mensaje que nombra la diferencia.
     """
-    raise NotImplementedError(
-        "Completen cargar_modelo antes de ejecutar el programa."
-    )
+    metadata = leer_metadata(directorio)
+
+    if list(metadata["features"]) != list(FEATURES):
+        raise ErrorArtefacto(
+            "Las variables del artefacto no calzan con el contrato: "
+            f"el artefacto trae {list(metadata['features'])} y el contrato "
+            f"espera {list(FEATURES)}."
+        )
+
+    if metadata["sklearn_version"] != sklearn.__version__:
+        raise ErrorArtefacto(
+            "La versión de scikit-learn no coincide: el artefacto se entrenó con "
+            f"{metadata['sklearn_version']} y el servicio usa {sklearn.__version__}."
+        )
+
+    modelo = joblib.load(directorio / "model.joblib")
+    return modelo, metadata
