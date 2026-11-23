@@ -1,0 +1,16 @@
+# Secretos y entornos locales
+.env
+.venv
+
+data
+notebooks
+tests
+scripts
+
+# Cachés y control de versiones
+.git
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.ipynb_checkpoints
