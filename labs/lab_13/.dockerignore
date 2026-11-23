@@ -2,9 +2,6 @@
 .env
 .venv
 
-# El modelo entra por un volumen en lugar de dentro de la imagen
-models
-
 data
 notebooks
 tests

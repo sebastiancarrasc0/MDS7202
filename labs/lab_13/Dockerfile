@@ -15,6 +15,7 @@ RUN uv sync --locked --only-group servicio --no-install-project
 
 # Dependencias del proyecto (la app como tal)
 COPY src ./src
+COPY models ./models
 
 # Usuario sin privilegios
 RUN useradd --system --create-home appuser
