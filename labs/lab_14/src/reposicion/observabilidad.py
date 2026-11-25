@@ -11,9 +11,12 @@ from src.reposicion.config import Settings
 
 def registrar_trazas(proyecto: str, endpoint: str):
     """Conecta LangChain con Phoenix: cada llamada queda como una traza."""
-    raise NotImplementedError(
-        "Completen registrar_trazas antes de ejecutar esta celda."
+    from phoenix.otel import register
+
+    reg = register(
+        project_name=proyecto, endpoint=endpoint, auto_instrument=True
     )
+    return reg
 
 
 def phoenix_activo(url: str) -> bool:
