@@ -1,0 +1,60 @@
+[project]
+name = "reposicion"
+version = "0.1.0"
+description = "Proyecto del Laboratorio 14: agente de logística alimentaria de Mar y Huerta"
+requires-python = ">=3.13,<3.14"
+dependencies = []
+
+# Dos grupos. `lab` es lo que el agente, el servidor de bodegas y la interfaz
+# necesitan para correr; `dev` agrega lo que usa el equipo para trabajar, como
+# JupyterLab y pytest. Los dos se instalan con `uv sync --locked --all-groups`.
+[dependency-groups]
+lab = [
+    "arize-phoenix>=22.0.0",
+    "chromadb>=1.5.0",
+    "fastapi>=0.115.0",
+    "httpx>=0.28.0",
+    "langchain>=1.5.0",
+    "langchain-chroma>=1.1.0",
+    "langchain-openai>=1.8.0",
+    "langchain-tavily>=0.2.0",
+    "langchain-text-splitters>=1.0.0",
+    "openinference-instrumentation-langchain>=0.1.0",
+    "pydantic>=2.13.0",
+    "pydantic-settings>=2.10.0",
+    "streamlit>=1.67.0",
+    "uvicorn>=0.35.0",
+]
+dev = [
+    "ipykernel>=7.3.0",
+    "jupyterlab>=4.6.2",
+    "jupytext==1.19.5",
+    "nbformat>=5.10",
+    "pre-commit>=4.6.1",
+    "pytest>=9.1.1",
+    "ruff>=0.17.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Permite importar con `from src.reposicion...`, igual que el notebook.
+pythonpath = ["."]
+markers = [
+    "etapa0: pruebas de lo que viene dado (servidor, políticas, configuración, caché, trazas)",
+    "etapa1: pruebas del agente mínimo",
+    "etapa2: pruebas del RAG sobre las políticas",
+    "etapa3: pruebas de los proveedores y la propuesta de reposición",
+    "etapa4: pruebas de la aprobación humana (etapa bonus)",
+]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 80
+target-version = "py313"
+# Los notebooks y los .md son material docente. Sin esta exclusión,
+# ruff-format reescribe el .py pareado y rompe el par dentro del commit.
+extend-exclude = ["notebooks", "*.md"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "SIM", "RUF", "PT", "PTH"]
+ignore = ["E501", "RUF003"]

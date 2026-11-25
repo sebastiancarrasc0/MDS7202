@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Secretos y artefactos que se generan al trabajar: nunca se versionan.
+.env
+data/processed/
+.phoenix/
+.cache/
+resultados/
